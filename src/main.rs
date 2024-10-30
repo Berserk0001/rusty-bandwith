@@ -107,7 +107,7 @@ impl AppState {
                     let result = rt.block_on(async {
                         process_image(
                             &task.url,
-                            task.quality,
+                            task.quality as u8,
                             task.keep_color,
                             task.use_webp,
                         ).await
@@ -215,6 +215,7 @@ async fn handle_request(req: Request<Body>, state: Arc<AppState>) -> Result<Resp
         state.print_cache_stats();
         return Ok(response_builder
             .header("X-Cache", "HIT")
+            .header("Content-Length", cached_image.len().to_string())
             .body(Body::from(cached_image))
             .unwrap());
     }
@@ -257,6 +258,7 @@ async fn handle_request(req: Request<Body>, state: Arc<AppState>) -> Result<Resp
             
             Ok(response_builder
                 .header("X-Cache", "MISS")
+                .header("Content-Length", processed_image.len().to_string())
                 .body(Body::from(processed_image))
                 .unwrap())
         }
@@ -332,16 +334,16 @@ fn extract_parameters(full_url: &str) -> (String, f32, bool) {
 }
 
 async fn process_image(
-    url: &str, 
-    quality: f32, 
+    url: &str,
+    quality: u8,
     keep_color: bool,
     use_webp: bool,
 ) -> Result<Vec<u8>, Box<dyn std::error::Error + Send + Sync>> {
     println!("Processing image on thread {:?}", std::thread::current().id());
-    
+
     let parsed_url = url::Url::parse(url)?;
     let host = parsed_url.host_str().unwrap_or("");
-    
+
     let response = CLIENT.get(url)
         .header("Referer", format!("https://{}/", host))
         .header("Origin", format!("https://{}", host))
@@ -354,39 +356,34 @@ async fn process_image(
     if !response.status().is_success() {
         return Err(format!("Failed to fetch image: HTTP {}", response.status()).into());
     }
+    let img_bytes = response.bytes().await?;
+    let mut img = image::load_from_memory(&img_bytes)?;
 
-    let image_data = response.bytes().await?.to_vec();
-    
-    let img = image::load_from_memory(&image_data)?;
-    
-    let processed_img = if !keep_color {
-        DynamicImage::ImageLuma8(img.into_luma8())
-    } else {
-        img
-    };
-
-    let quality_u8 = quality.clamp(0.0, 100.0) as u8;
-    
-    if use_webp {
-        // Convert to RGB8 first
-        let rgb_img = processed_img.to_rgb8();
-        let width = rgb_img.width();
-        let height = rgb_img.height();
-        let encoder = webp::Encoder::from_rgb(rgb_img.as_raw(), width, height);
-        let encoded = encoder.encode(quality);
-        Ok(encoded.to_vec())
-    } else {
-        let mut output = Vec::new();
-        let mut cursor = Cursor::new(&mut output);
-        let encoder = image::codecs::avif::AvifEncoder::new_with_speed_quality(
-            &mut cursor,
-            10,
-            quality_u8
-        );
-        processed_img.write_with_encoder(encoder)?;
-        Ok(output)
+    // Convert to grayscale if not keeping color
+    if !keep_color {
+        img = DynamicImage::ImageLuma8(img.to_luma8());
     }
+
+    let mut buffer = Vec::new();
+    if use_webp {
+        // Create WebP encoder with transparency support
+        let encoder = webp::Encoder::from_image(&img).map_err(|e| e.to_string())?;
+        let encoded = encoder
+            .encode(quality as f32); // quality from 0-100
+            //.map_err(|e| e.to_string())?;
+        
+        buffer.extend_from_slice(&encoded);
+    } else {
+        // For non-WebP format (e.g., JPEG), use standard encoding
+        let encoder = webp::Encoder::from_image(&img).map_err(|e| e.to_string())?;
+        let encoded = encoder
+            .encode(quality as f32); // quality from 0-100
+        buffer.extend_from_slice(&encoded);
+    }
+
+    Ok(buffer)
 }
+
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
