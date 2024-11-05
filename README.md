@@ -4,6 +4,6 @@ This version uses way less system resources when running (in itself just 15M of 
 
 By default it uses the port 8080 and 512MB of ram for caching purposes. Both can be changed with launch parameters.
 
-Has Avif and WebP mode. I recommend using WebP with the parameter "--webp" due to its faster encoding speed.
+Has webp encoding only, Avif was tried but found out to be too slow
 
 Hardware encoding is not yet supported
