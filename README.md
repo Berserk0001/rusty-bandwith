@@ -63,7 +63,7 @@ Using JXL encoding:
 ### Command Line Options
 
 - `--port <PORT>` or `-p <PORT>`: Set the listening port (default: 8080)
-- `--jxl`: Enable JPEG XL encoding instead of WebP
+- `--jxl`: Enable JPEG XL encoding instead of WebP (experimental option, alpha channel isn't being handled with this option)
 - `--speed <1-8>`: Set JXL encoding speed/effort level (only with --jxl)
   - 1: Fastest encoding, lower quality (Lightning)
   - 8: Slowest encoding, highest quality (Tortoise)
