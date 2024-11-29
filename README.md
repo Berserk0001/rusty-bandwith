@@ -2,6 +2,8 @@
 
 A high-performance image compression proxy server written in Rust. This service can compress and convert images on-the-fly using either WebP or JPEG XL formats, with optional grayscale conversion.
 
+Works perfectly with bandwidth hero browser extension.
+
 ## Features
 
 - **Multiple Output Formats**: Supports both WebP and JPEG XL (JXL) encoding
@@ -97,19 +99,18 @@ http://localhost:8080/?url=https://example.com/image.jpg&l=50&bw=1
 ### WebP Mode (Default)
 
 - Supports transparency (alpha channel)
-- Excellent browser compatibility
-- Good balance of quality and compression
-- Quality setting is straightforward (0-100)
+- Most browser support it
+
 
 ### JPEG XL Mode
 
-- Newer format with potentially better compression
+- Potentially better compression
 - Quality settings work inversely (lower numbers = better quality)
 - Currently doesn't preserve alpha channel
-- Requires browser support for JPEG XL
+- Requires browser support for JPEG XL (tested on Firefox nightly, it works)
 - Configurable encoding speed for quality/speed tradeoff
 
-## Performance Tips
+## Performance settings
 
 1. **JXL Encoding Speed**:
    - Use lower speed values (1-3) for faster encoding but lower quality
@@ -119,7 +120,7 @@ http://localhost:8080/?url=https://example.com/image.jpg&l=50&bw=1
 2. **Quality Settings**:
    - Values 70-80 provide good balance for most images
    - Use 90+ only for images requiring high detail
-   - Values below 60 may show visible compression artifacts
+   - Values below 60 may show visible compression artifacts but size saves are bigger
 
 3. **Memory Usage**:
    - The server processes each image independently
@@ -158,4 +159,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the GPL-3.0 License - see the LICENSE file for details.
