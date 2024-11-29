@@ -35,7 +35,7 @@ sudo apt install libwebp-dev libjxl-dev
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/rusty-bandwidth.git
+git clone https://github.com/furdiburd/rusty-bandwith.git
 cd rusty-bandwidth
 ```
 
