@@ -14,7 +14,7 @@ Works perfectly with bandwidth hero browser extension.
 
 ## Installation
 
-## Download it from releases (recommended if you use a linux distro)
+### Download it from releases (recommended if you use a linux distro)
 
 https://github.com/furdiburd/rusty-bandwith/releases
 
