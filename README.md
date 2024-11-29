@@ -12,9 +12,11 @@ A high-performance image compression proxy server written in Rust. This service 
 
 ## Installation
 
-## (recommended if you use a linux distro) Download it from releases
+## Download it from releases (recommended if you use a linux distro)
 
 https://github.com/furdiburd/rusty-bandwith/releases
+
+### Building from Source
 
 ### Prerequisites
 
@@ -27,8 +29,7 @@ On Ubuntu/Debian:
 sudo apt update
 sudo apt install libwebp-dev libjxl-dev
 ```
-
-### Building from Source
+### Building the project
 
 1. Clone the repository:
 ```bash
