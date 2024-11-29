@@ -137,22 +137,6 @@ src/
 Cargo.toml         # Project dependencies and settings
 ```
 
-### Building for Development
-
-```bash
-# Debug build with development features
-cargo build
-
-# Run with logging
-RUST_LOG=debug cargo run
-```
-
-### Running Tests
-
-```bash
-cargo test
-```
-
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
