@@ -8,5 +8,8 @@ reqwest = { version = "0.11" }
 hyper = { version = "0.14", features = ["server"] }
 tokio = { version = "1", features = ["full"] }
 percent-encoding = "2.1"
-image = { version = "0.24", features = ["webp"] }
-webp = "0.2"
+image = { version = "*", features = ["webp"] }
+webp = "*"
+jpegxl-rs = "0.11"
+clap = { version = "4", features = ["derive"] }
+
