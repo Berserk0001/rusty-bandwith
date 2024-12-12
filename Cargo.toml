@@ -12,4 +12,8 @@ image = { version = "*", features = ["webp"] }
 webp = "*"
 jpegxl-rs = "0.11"
 clap = { version = "4", features = ["derive"] }
+vercel_runtime = "1.1.3"
 
+[[bin]]
+name = "main"
+path = "api/main.rs"
