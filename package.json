@@ -1,0 +1,12 @@
+{
+  "name": "rusty-bandwidth",
+  "version": "1.0.0",
+  "description": "A high-performance image compression proxy server written in Rust, deployed on Vercel.",
+  "main": "api/main.rs",
+  "scripts": {
+    "start": "vercel dev"
+  },
+  "keywords": ["rust", "vercel", "image-compression", "webp", "jxl"],
+  "author": "Your Name",
+  "license": "GPL-3.0"
+}
