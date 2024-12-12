@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "Cargo.toml",
+      "use": "@vercel/rust"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "target/release/rusty-bandwidth"
+    }
+  ],
+  "env": {
+    "RUST_BACKTRACE": "1"
+  },
+  "buildCommand": "cargo build --release"
+}
